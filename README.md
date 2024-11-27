@@ -2,11 +2,25 @@
 
 * Developer: Jiajun Huang (Github: JiajunHuang1999)
 
-This is the artifact of hZCCL, which has been accepted by SC '24.
+This is the artifact of hZCCL, which has been published by SC '24. 
+Paper: https://dl.acm.org/doi/10.1109/SC41406.2024.00110
 
 ## About hZCCL
 
 hZCCL is a *first-ever* homomorphic compression-communication co-design, which enables operations to be performed directly on compressed data, saving the cost of time-consuming decompression and recompression. 
+
+## Citation
+
+If you find hZCCL useful in your research or applications, we kindly invite you to cite our paper. Your support helps advance the field and acknowledges the contributions of our work. Thank you!
+- **[SC '24]** hZCCL: Accelerating Collective Communication with Co-Designed Homomorphic Compression
+    ```bibtex
+    @inproceedings{huang2024hZCCL,
+        title={hZCCL: Accelerating Collective Communication with Co-Designed Homomorphic Compression},
+        author = {Huang, Jiajun and Di, Sheng and Yu, Xiaodong and Zhai, Yujia and Liu, Jinyang and Jian, Zizhe and Liang, Xin and Zhao, Kai and Lu, Xiaoyi and Chen, Zizhong and Cappello, Franck and Guo, Yanfei and Thakur, Rajeev},
+        booktitle = {Proceedings of the International Conference for High Performance Computing, Networking, Storage, and Analysis},
+        year = {2024}
+    }
+    ```
 
 <details>
 <summary>
