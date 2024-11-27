@@ -3,6 +3,7 @@
 * Developer: Jiajun Huang (Github: JiajunHuang1999)
 
 This is the artifact of hZCCL, which has been published by SC '24. 
+
 Paper: https://dl.acm.org/doi/10.1109/SC41406.2024.00110
 
 ## About hZCCL
