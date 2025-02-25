@@ -33,10 +33,10 @@ If you find ZCCL useful in your research or applications, we kindly invite you t
     ```
 
 ## Installation
-Configure and build the ZCCL:
+Configure and build ZCCL:
 ```bash
 # Decompress the downloaded files
-# Change to the artifact directory and set up the installation directory:
+# Change to ZCCL directory and set up the installation directory:
 cd ZCCL
 mkdir install
 
@@ -44,12 +44,12 @@ mkdir install
 ./autogen.sh
 ./configure --prefix=$(pwd)/install --enable-openmp CC=mpicc
 
-# Compile the artifact using multiple threads:
+# Compile ZCCL using multiple threads:
 make -j
 
-# Install the compiled artifact:
+# Install the compiled ZCCL:
 make install
 
-# Change to the jobs directory to proceed with running the artifact:
+# Change to the jobs directory to proceed with running the ZCCL:
 cd jobs
 ```
