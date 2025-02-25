@@ -941,7 +941,6 @@ void hZCCL_float_openmp_threadblock_arg(unsigned char *outputBytes, float *oriDa
     
 #else
     printf("Error! OpenMP not supported!\n");
-    return NULL;
 #endif
 }
 
