@@ -1,10 +1,8 @@
-/**
- *  @file hZCCL_ByteToolkit.h
+/*
+ * Copyright (C) by Argonne National Laboratory
+ *     See COPYRIGHT in top-level directory
  *  @author Sheng Di
  *  @date Feb, 2022
- *  @brief Header file for the ByteToolkit.c.
- *  (C) 2022 by Mathematics and Computer Science (MCS), Argonne National Laboratory.
- *      See COPYRIGHT in top-level directory.
  */
 
 #ifndef _hZCCL_ByteToolkit_H

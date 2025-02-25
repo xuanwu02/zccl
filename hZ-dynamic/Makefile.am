@@ -1,3 +1,8 @@
+##
+## Copyright (C) by Argonne National Laboratory
+##     See COPYRIGHT in top-level directory
+##
+
 #AM_CFLAGS = -I./include -I../zlib
 #LDFLAGS=-fPIC -shared
 

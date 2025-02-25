@@ -1,10 +1,8 @@
-/**
- *  @file hZCCL_rw.h
+/*
+ * Copyright (C) by Argonne National Laboratory
+ *     See COPYRIGHT in top-level directory
  *  @author Sheng Di
  *  @date Jan, 2022
- *  @brief Header file for the whole io interface.
- *  (C) 2022 by Mathematics and Computer Science (MCS), Argonne National Laboratory.
- *      See COPYRIGHT in top-level directory.
  */
 
 #ifndef _hZCCL_RW_H

@@ -1,10 +1,8 @@
-/**
- *  @file hZCCL_utility.c
+/*
+ * Copyright (C) by Argonne National Laboratory
+ *     See COPYRIGHT in top-level directory
  *  @author Sheng Di
  *  @date Feb, 2022
- *  @brief 
- *  (C) 2022 by Mathematics and Computer Science (MCS), Argonne National Laboratory.
- *      See COPYRIGHT in top-level directory.
  */
 
 #include <stdio.h>

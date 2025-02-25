@@ -1,5 +1,6 @@
-/**
- *  @file hZCCLd_Float.h
+/*
+ * Copyright (C) by Argonne National Laboratory
+ *     See COPYRIGHT in top-level directory
  *  @author Jiajun Huang <jiajunhuang19990916@gmail.com>
  *  @date Oct, 2023
  */

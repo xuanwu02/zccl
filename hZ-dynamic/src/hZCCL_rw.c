@@ -1,10 +1,8 @@
-/**
- *  @file hZCCL_rw.c
+/*
+ * Copyright (C) by Argonne National Laboratory
+ *     See COPYRIGHT in top-level directory
  *  @author Sheng Di
  *  @date April, 2022
- *  @brief io interface for fortrance
- *  (C) 2022 by Mathematics and Computer Science (MCS), Argonne National Laboratory.
- *      See COPYRIGHT in top-level directory.
  */
 
 #include <stdio.h>

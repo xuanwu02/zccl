@@ -1,3 +1,8 @@
+##
+## Copyright (C) by Argonne National Laboratory
+##     See COPYRIGHT in top-level directory
+##
+
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 

@@ -1,3 +1,8 @@
+##
+## Copyright (C) by Argonne National Laboratory
+##     See COPYRIGHT in top-level directory
+##
+
 AUTOMAKE_OPTIONS=foreign
 AM_CFLAGS = -I../hZ-dynamic/include
 AM_FCFLAGS = -I../hZ-dynamic/include -I../hZ-dynamic
