@@ -15,7 +15,7 @@ If you find ZCCL useful in your research or applications, we kindly invite you t
 - **[IPDPS '24]** An Optimized Error-controlled MPI Collective Framework Integrated with Lossy Compression
     ```bibtex
     @inproceedings{huang2023ccoll,
-        title={hZCCL: Accelerating Collective Communication with Co-Designed Homomorphic Compression},
+        title={An Optimized Error-controlled MPI Collective Framework Integrated with Lossy Compression},
         author = {Huang, Jiajun and Di, Sheng and Yu, Xiaodong and Zhai, Yujia and Liu, Jinyang and Jian, Zizhe and Liang, Xin and Zhao, Kai and Lu, Xiaoyi and Chen, Zizhong and Cappello, Franck and Guo, Yanfei and Thakur, Rajeev},
         booktitle = {Proceedings of the 2024 IEEE International Parallel and Distributed Processing Symposium (IPDPS)},
         year = {2024}
