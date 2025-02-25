@@ -1,6 +1,7 @@
 # ZCCL: The Compression-accelerated Collective Communications Library
 
-* Developer: Jiajun Huang (Github: JiajunHuang1999)
+* Developer and maintainer: ZCCL.org
+* Contact: jhuan380@ucr.edu
 
 This is the official repo of ZCCL, The Compression-accelerated Collective Communications Library. ZCCL is based on the following research works.
 
