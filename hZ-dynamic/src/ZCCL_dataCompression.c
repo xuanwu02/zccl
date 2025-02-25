@@ -9,9 +9,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include "hZCCL.h"
-#include "hZCCL_dataCompression.h"
-#include "hZCCL_BytesToolkit.h"
+#include "ZCCL.h"
+#include "ZCCL_dataCompression.h"
+#include "ZCCL_BytesToolkit.h"
 
 int computeByteSizePerIntValue(long valueRangeSize)
 {

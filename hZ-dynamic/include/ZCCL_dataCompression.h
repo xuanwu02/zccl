@@ -5,14 +5,14 @@
  *  @date July, 2022
  */
 
-#ifndef _hZCCL_DataCompression_H
-#define _hZCCL_DataCompression_H
+#ifndef _ZCCL_DataCompression_H
+#define _ZCCL_DataCompression_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "hZCCL.h"
+#include "ZCCL.h"
 #include <stdio.h>
 #include <stdbool.h>
 
@@ -61,5 +61,5 @@ int compIdenticalLeadingBytesCount_float(unsigned char* preBytes, unsigned char*
 }
 #endif
 
-#endif /* ----- #ifndef _hZCCL_DataCompression_H  ----- */
+#endif /* ----- #ifndef _ZCCL_DataCompression_H  ----- */
 

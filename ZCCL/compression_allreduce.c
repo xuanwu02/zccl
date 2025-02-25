@@ -201,22 +201,22 @@ int main(int argc, char *argv[])
                         }
                         else if (select == 1)
                         {
-                                MPI_Allreduce_hZCCL_RI2_mt_oa_record(invec, inoutvec, compressionRatio, tolerance, blockSize, size, MPI_FLOAT, MPI_SUM,
+                                MPI_Allreduce_ZCCL_RI2_mt_oa_record(invec, inoutvec, compressionRatio, tolerance, blockSize, size, MPI_FLOAT, MPI_SUM,
                                                                      MPI_COMM_WORLD);
                         }
                         else if (select == 2)
                         {
-                                MPI_Allreduce_hZCCL_RI2_mt_oa_ho_record(invec, inoutvec, compressionRatio, tolerance, blockSize, size, MPI_FLOAT, MPI_SUM,
+                                MPI_Allreduce_ZCCL_RI2_mt_oa_ho_record(invec, inoutvec, compressionRatio, tolerance, blockSize, size, MPI_FLOAT, MPI_SUM,
                                                                         MPI_COMM_WORLD);
                         }
                         else if (select == 3)
                         {
-                                MPI_Allreduce_hZCCL_RI2_st_oa_record(invec, inoutvec, compressionRatio, tolerance, blockSize, size, MPI_FLOAT, MPI_SUM,
+                                MPI_Allreduce_ZCCL_RI2_st_oa_record(invec, inoutvec, compressionRatio, tolerance, blockSize, size, MPI_FLOAT, MPI_SUM,
                                                                      MPI_COMM_WORLD);
                         }
                         else if (select == 4)
                         {
-                                MPI_Allreduce_hZCCL_RI2_st_oa_ho_record(invec, inoutvec, compressionRatio, tolerance, blockSize, size, MPI_FLOAT, MPI_SUM,
+                                MPI_Allreduce_ZCCL_RI2_st_oa_ho_record(invec, inoutvec, compressionRatio, tolerance, blockSize, size, MPI_FLOAT, MPI_SUM,
                                                                         MPI_COMM_WORLD);
                         }
                 }
@@ -236,7 +236,7 @@ int main(int argc, char *argv[])
                         {
                                 MPI_Barrier(MPI_COMM_WORLD);
                                 MPI_timer -= MPI_Wtime();
-                                MPI_Allreduce_hZCCL_RI2_mt_oa_record(invec, inoutvec, compressionRatio, tolerance, blockSize, size, MPI_FLOAT, MPI_SUM,
+                                MPI_Allreduce_ZCCL_RI2_mt_oa_record(invec, inoutvec, compressionRatio, tolerance, blockSize, size, MPI_FLOAT, MPI_SUM,
                                                                      MPI_COMM_WORLD);
                                 MPI_timer += MPI_Wtime();
                         }
@@ -244,7 +244,7 @@ int main(int argc, char *argv[])
                         {
                                 MPI_Barrier(MPI_COMM_WORLD);
                                 MPI_timer -= MPI_Wtime();
-                                MPI_Allreduce_hZCCL_RI2_mt_oa_ho_record(invec, inoutvec, compressionRatio, tolerance, blockSize, size, MPI_FLOAT, MPI_SUM,
+                                MPI_Allreduce_ZCCL_RI2_mt_oa_ho_record(invec, inoutvec, compressionRatio, tolerance, blockSize, size, MPI_FLOAT, MPI_SUM,
                                                                         MPI_COMM_WORLD);
                                 MPI_timer += MPI_Wtime();
                         }
@@ -252,7 +252,7 @@ int main(int argc, char *argv[])
                         {
                                 MPI_Barrier(MPI_COMM_WORLD);
                                 MPI_timer -= MPI_Wtime();
-                                MPI_Allreduce_hZCCL_RI2_st_oa_record(invec, inoutvec, compressionRatio, tolerance, blockSize, size, MPI_FLOAT, MPI_SUM,
+                                MPI_Allreduce_ZCCL_RI2_st_oa_record(invec, inoutvec, compressionRatio, tolerance, blockSize, size, MPI_FLOAT, MPI_SUM,
                                                                      MPI_COMM_WORLD);
                                 MPI_timer += MPI_Wtime();
                         }
@@ -260,7 +260,7 @@ int main(int argc, char *argv[])
                         {
                                 MPI_Barrier(MPI_COMM_WORLD);
                                 MPI_timer -= MPI_Wtime();
-                                MPI_Allreduce_hZCCL_RI2_st_oa_ho_record(invec, inoutvec, compressionRatio, tolerance, blockSize, size, MPI_FLOAT, MPI_SUM,
+                                MPI_Allreduce_ZCCL_RI2_st_oa_ho_record(invec, inoutvec, compressionRatio, tolerance, blockSize, size, MPI_FLOAT, MPI_SUM,
                                                                         MPI_COMM_WORLD);
                                 MPI_timer += MPI_Wtime();
                         }

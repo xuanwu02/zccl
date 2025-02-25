@@ -5,10 +5,10 @@
  *  @date Feb, 2022
  */
 
-#ifndef _hZCCL_UTILITY_H
-#define _hZCCL_UTILITY_H
+#ifndef _ZCCL_UTILITY_H
+#define _ZCCL_UTILITY_H
 
-#include "hZCCL.h"
+#include "ZCCL.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -32,4 +32,4 @@ void sz_cost_end_msg(char *);
 }
 #endif
 
-#endif /* ----- #ifndef _hZCCL_UTILITY_H  ----- */
+#endif /* ----- #ifndef _ZCCL_UTILITY_H  ----- */

@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <inttypes.h>
-#include "hZCCL.h"
+#include "ZCCL.h"
 #ifdef _OPENMP
 #include "omp.h"
 #endif
@@ -208,8 +208,8 @@ int main(int argc, char *argv[])
 
     for (size_t i = 0; i < ITERATIONS; i++)
     {
-        hZCCL_float_openmp_threadblock_arg(cmpData, oriData, &cmpSize, errBound, nbEle, blockSize);
-        hZCCL_float_openmp_threadblock_arg(cmpData2, oriData2, &cmpSize2, errBound, nbEle, blockSize);
+        ZCCL_float_openmp_threadblock_arg(cmpData, oriData, &cmpSize, errBound, nbEle, blockSize);
+        ZCCL_float_openmp_threadblock_arg(cmpData2, oriData2, &cmpSize2, errBound, nbEle, blockSize);
     }
     cost_end();
     initial_com_cost = totalCost / ITERATIONS;
@@ -218,9 +218,9 @@ int main(int argc, char *argv[])
 
     for (size_t i = 0; i < ITERATIONS; i++)
     {
-        hZCCL_float_decompress_openmp_threadblock_arg(decData, nbEle, errBound, blockSize, cmpData);
+        ZCCL_float_decompress_openmp_threadblock_arg(decData, nbEle, errBound, blockSize, cmpData);
 
-        hZCCL_float_decompress_openmp_threadblock_arg(decData2, nbEle, errBound, blockSize, cmpData2);
+        ZCCL_float_decompress_openmp_threadblock_arg(decData2, nbEle, errBound, blockSize, cmpData2);
     }
     cost_end();
     normal_decom_cost = totalCost / ITERATIONS;
@@ -236,7 +236,7 @@ int main(int argc, char *argv[])
     cost_start();
     for (size_t i = 0; i < ITERATIONS; i++)
     {
-        hZCCL_float_openmp_threadblock_arg(addcmpData_normal, adddecData_normal, &addcmpSize_normal, errBound, nbEle, blockSize);
+        ZCCL_float_openmp_threadblock_arg(addcmpData_normal, adddecData_normal, &addcmpSize_normal, errBound, nbEle, blockSize);
     }
     cost_end();
     normal_com_cost = totalCost / ITERATIONS;
@@ -249,7 +249,7 @@ int main(int argc, char *argv[])
     for (size_t i = 0; i < ITERATIONS; i++)
     {
 
-        hZCCL_float_homomophic_add_openmp_threadblock(addcmpData, &addcmpSize, nbEle, errBound, blockSize, cmpData, cmpData2);
+        ZCCL_float_homomophic_add_openmp_threadblock(addcmpData, &addcmpSize, nbEle, errBound, blockSize, cmpData, cmpData2);
     }
     cost_end();
     homo_total_cost = totalCost / ITERATIONS;
@@ -258,14 +258,14 @@ int main(int argc, char *argv[])
     cost_start();
     for (size_t i = 0; i < ITERATIONS; i++)
     {
-        hZCCL_float_decompress_openmp_threadblock_arg(adddecData, nbEle, errBound, blockSize, addcmpData);
+        ZCCL_float_decompress_openmp_threadblock_arg(adddecData, nbEle, errBound, blockSize, addcmpData);
     }
     cost_end();
 
     cost_start();
     for (size_t i = 0; i < ITERATIONS; i++)
     {
-        hZCCL_float_decompress_openmp_threadblock_arg(adddecData_2, nbEle, errBound, blockSize, addcmpData_normal);
+        ZCCL_float_decompress_openmp_threadblock_arg(adddecData_2, nbEle, errBound, blockSize, addcmpData_normal);
     }
     cost_end();
 

@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "hZCCL_utility.h"
+#include "ZCCL_utility.h"
 
 struct timeval sz_costStart; /*only used for recording the cost*/
 double sz_totalCost = 0;

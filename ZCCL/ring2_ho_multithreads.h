@@ -6,7 +6,7 @@
  */
 #include <stdio.h>
 #include "mpi.h"
-#include "hZCCL.h"
+#include "ZCCL.h"
 
 #include "./include/libs.h"
 
@@ -189,7 +189,7 @@ int MPIR_Allgatherv_intra_ring_RI2_mt_oa_ho_record(const void *sendbuf,
 
     for (i = 0; i < comm_size; i++)
     {
-        hZCCL_float_decompress_openmp_threadblock_arg((char *)recvbuf + displs[i] * recvtype_extent, recvcounts[i], absErrBound, blockSize, (char *)temp_recvbuf + displs[i] * recvtype_extent);
+        ZCCL_float_decompress_openmp_threadblock_arg((char *)recvbuf + displs[i] * recvtype_extent, recvcounts[i], absErrBound, blockSize, (char *)temp_recvbuf + displs[i] * recvtype_extent);
 
     }
     free(compressed_sizes);
@@ -200,7 +200,7 @@ fn_fail:
 }
 
 
-int MPI_Allreduce_hZCCL_RI2_mt_oa_ho_record(const void *sendbuf,
+int MPI_Allreduce_ZCCL_RI2_mt_oa_ho_record(const void *sendbuf,
                                           void *recvbuf,
                                           float compressionRatio,
                                           float tolerance,
@@ -281,7 +281,7 @@ int MPI_Allreduce_hZCCL_RI2_mt_oa_ho_record(const void *sendbuf,
     {
         recv_rank = (nranks + rank - 2 - i) % nranks;
         send_rank = (nranks + rank - 1 - i) % nranks;
-        hZCCL_float_openmp_threadblock_arg(outputBytes + displs[send_rank] * extent, (char *)recvbuf + displs[send_rank] * extent, &compressed_sizes[send_rank], absErrBound, cnts[send_rank], blockSize);
+        ZCCL_float_openmp_threadblock_arg(outputBytes + displs[send_rank] * extent, (char *)recvbuf + displs[send_rank] * extent, &compressed_sizes[send_rank], absErrBound, cnts[send_rank], blockSize);
         
     }
 
@@ -315,7 +315,7 @@ int MPI_Allreduce_hZCCL_RI2_mt_oa_ho_record(const void *sendbuf,
 
         MPI_Test(&reqs[1], &flag, &stas[1]);
 
-        hZCCL_float_homomophic_add_openmp_threadblock(outputBytes + displs[recv_rank] * extent, &compressed_sizes[recv_rank], cnts[recv_rank], absErrBound, blockSize, tmpbuf, outputBytes + displs[recv_rank] * extent);
+        ZCCL_float_homomophic_add_openmp_threadblock(outputBytes + displs[recv_rank] * extent, &compressed_sizes[recv_rank], cnts[recv_rank], absErrBound, blockSize, tmpbuf, outputBytes + displs[recv_rank] * extent);
 
        
         MPI_Wait(&reqs[1], &stas[1]);
@@ -510,7 +510,7 @@ int MPIR_Allgatherv_intra_ring_RI2_st_oa_ho_record(const void *sendbuf,
     
     for (i = 0; i < comm_size; i++)
     {
-        hZCCL_float_decompress_single_thread_arg((char *)recvbuf + displs[i] * recvtype_extent, recvcounts[i], absErrBound, blockSize, (char *)temp_recvbuf + displs[i] * recvtype_extent);
+        ZCCL_float_decompress_single_thread_arg((char *)recvbuf + displs[i] * recvtype_extent, recvcounts[i], absErrBound, blockSize, (char *)temp_recvbuf + displs[i] * recvtype_extent);
     }
     free(compressed_sizes);
 fn_exit:
@@ -520,7 +520,7 @@ fn_fail:
 }
 
 
-int MPI_Allreduce_hZCCL_RI2_st_oa_ho_record(const void *sendbuf,
+int MPI_Allreduce_ZCCL_RI2_st_oa_ho_record(const void *sendbuf,
                                           void *recvbuf,
                                           float compressionRatio,
                                           float tolerance,
@@ -600,7 +600,7 @@ int MPI_Allreduce_hZCCL_RI2_st_oa_ho_record(const void *sendbuf,
     {
         recv_rank = (nranks + rank - 2 - i) % nranks;
         send_rank = (nranks + rank - 1 - i) % nranks;
-        hZCCL_float_single_thread_arg(outputBytes + displs[send_rank] * extent, (char *)recvbuf + displs[send_rank] * extent, &compressed_sizes[send_rank], absErrBound, cnts[send_rank], blockSize);
+        ZCCL_float_single_thread_arg(outputBytes + displs[send_rank] * extent, (char *)recvbuf + displs[send_rank] * extent, &compressed_sizes[send_rank], absErrBound, cnts[send_rank], blockSize);
        
     }
 
@@ -635,7 +635,7 @@ int MPI_Allreduce_hZCCL_RI2_st_oa_ho_record(const void *sendbuf,
         MPI_Test(&reqs[1], &flag, &stas[1]);
 
 
-        hZCCL_float_homomophic_add_single_thread(outputBytes + displs[recv_rank] * extent, &compressed_sizes[recv_rank], cnts[recv_rank], absErrBound, blockSize, tmpbuf, outputBytes + displs[recv_rank] * extent);
+        ZCCL_float_homomophic_add_single_thread(outputBytes + displs[recv_rank] * extent, &compressed_sizes[recv_rank], cnts[recv_rank], absErrBound, blockSize, tmpbuf, outputBytes + displs[recv_rank] * extent);
 
        
         MPI_Wait(&reqs[1], &stas[1]);
@@ -662,7 +662,7 @@ int MPI_Allreduce_hZCCL_RI2_st_oa_ho_record(const void *sendbuf,
 }
 
 
-int MPI_Allreduce_hZCCL_RI2_st_oa_ho_sep_record(const void *sendbuf,
+int MPI_Allreduce_ZCCL_RI2_st_oa_ho_sep_record(const void *sendbuf,
                                               void *recvbuf,
                                               float compressionRatio,
                                               float tolerance,
@@ -742,7 +742,7 @@ int MPI_Allreduce_hZCCL_RI2_st_oa_ho_sep_record(const void *sendbuf,
     {
         recv_rank = (nranks + rank - 2 - i) % nranks;
         send_rank = (nranks + rank - 1 - i) % nranks;
-        hZCCL_float_single_thread_arg(outputBytes + displs[send_rank] * extent, (char *)recvbuf + displs[send_rank] * extent, &compressed_sizes[send_rank], absErrBound, cnts[send_rank], blockSize);
+        ZCCL_float_single_thread_arg(outputBytes + displs[send_rank] * extent, (char *)recvbuf + displs[send_rank] * extent, &compressed_sizes[send_rank], absErrBound, cnts[send_rank], blockSize);
     }
 
     for (i = 0; i < nranks - 1; i++)
@@ -774,16 +774,16 @@ int MPI_Allreduce_hZCCL_RI2_st_oa_ho_sep_record(const void *sendbuf,
         MPI_Test(&reqs[1], &flag, &stas[1]);
 
 
-        hZCCL_float_homomophic_add_single_thread(outputBytes + displs[recv_rank] * extent, &compressed_sizes[recv_rank], cnts[recv_rank], absErrBound, blockSize, tmpbuf, outputBytes + displs[recv_rank] * extent);
+        ZCCL_float_homomophic_add_single_thread(outputBytes + displs[recv_rank] * extent, &compressed_sizes[recv_rank], cnts[recv_rank], absErrBound, blockSize, tmpbuf, outputBytes + displs[recv_rank] * extent);
 
         
         MPI_Wait(&reqs[1], &stas[1]);
 
-        hZCCL_float_homomophic_add_single_thread(outputBytes + displs[recv_rank] * extent, &compressed_sizes[recv_rank], cnts[recv_rank], absErrBound, blockSize, tmpbuf, outputBytes + displs[recv_rank] * extent);
+        ZCCL_float_homomophic_add_single_thread(outputBytes + displs[recv_rank] * extent, &compressed_sizes[recv_rank], cnts[recv_rank], absErrBound, blockSize, tmpbuf, outputBytes + displs[recv_rank] * extent);
 
     }
 
-    hZCCL_float_decompress_single_thread_arg((char *)recvbuf + displs[rank] * extent, cnts[rank], absErrBound, blockSize, outputBytes + displs[rank] * extent);
+    ZCCL_float_decompress_single_thread_arg((char *)recvbuf + displs[rank] * extent, cnts[rank], absErrBound, blockSize, outputBytes + displs[rank] * extent);
 
     
     mpi_errno = MPIR_Allgatherv_intra_ring_RI2_st_oa_record(MPI_IN_PLACE, -1, MPI_DATATYPE_NULL, recvbuf, cnts,
@@ -806,7 +806,7 @@ int MPI_Allreduce_hZCCL_RI2_st_oa_ho_sep_record(const void *sendbuf,
 }
 
 
-int MPI_Allreduce_hZCCL_RI2_mt_oa_ho_sep_record(const void *sendbuf,
+int MPI_Allreduce_ZCCL_RI2_mt_oa_ho_sep_record(const void *sendbuf,
                                               void *recvbuf,
                                               float compressionRatio,
                                               float tolerance,
@@ -886,7 +886,7 @@ int MPI_Allreduce_hZCCL_RI2_mt_oa_ho_sep_record(const void *sendbuf,
     {
         recv_rank = (nranks + rank - 2 - i) % nranks;
         send_rank = (nranks + rank - 1 - i) % nranks;
-        hZCCL_float_openmp_threadblock_arg(outputBytes + displs[send_rank] * extent, (char *)recvbuf + displs[send_rank] * extent, &compressed_sizes[send_rank], absErrBound, cnts[send_rank], blockSize);
+        ZCCL_float_openmp_threadblock_arg(outputBytes + displs[send_rank] * extent, (char *)recvbuf + displs[send_rank] * extent, &compressed_sizes[send_rank], absErrBound, cnts[send_rank], blockSize);
     }
 
     for (i = 0; i < nranks - 1; i++)
@@ -918,13 +918,13 @@ int MPI_Allreduce_hZCCL_RI2_mt_oa_ho_sep_record(const void *sendbuf,
         MPI_Test(&reqs[1], &flag, &stas[1]);
 
 
-        hZCCL_float_homomophic_add_openmp_threadblock(outputBytes + displs[recv_rank] * extent, &compressed_sizes[recv_rank], cnts[recv_rank], absErrBound, blockSize, tmpbuf, outputBytes + displs[recv_rank] * extent);
+        ZCCL_float_homomophic_add_openmp_threadblock(outputBytes + displs[recv_rank] * extent, &compressed_sizes[recv_rank], cnts[recv_rank], absErrBound, blockSize, tmpbuf, outputBytes + displs[recv_rank] * extent);
 
         MPI_Wait(&reqs[1], &stas[1]);
     }
 
 
-    hZCCL_float_decompress_openmp_threadblock_arg((char *)recvbuf + displs[rank] * extent, cnts[rank], absErrBound, blockSize, outputBytes + displs[rank] * extent);
+    ZCCL_float_decompress_openmp_threadblock_arg((char *)recvbuf + displs[rank] * extent, cnts[rank], absErrBound, blockSize, outputBytes + displs[rank] * extent);
 
    
     mpi_errno = MPIR_Allgatherv_intra_ring_RI2_mt_oa_record(MPI_IN_PLACE, -1, MPI_DATATYPE_NULL, recvbuf, cnts,

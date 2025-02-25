@@ -5,8 +5,8 @@
  *  @date Oct, 2023
  */
 
-#ifndef _hZCCL_TypeManager_H
-#define _hZCCL_TypeManager_H
+#ifndef _ZCCL_TypeManager_H
+#define _ZCCL_TypeManager_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -58,5 +58,5 @@ int getLeftMovingSteps(size_t k, unsigned char resiBitLength);
 }
 #endif
 
-#endif /* ----- #ifndef _hZCCL_TypeManager_H  ----- */
+#endif /* ----- #ifndef _ZCCL_TypeManager_H  ----- */
 

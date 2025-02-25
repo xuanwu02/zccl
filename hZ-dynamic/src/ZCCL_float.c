@@ -9,19 +9,19 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdbool.h>
-#include "hZCCL.h"
-#include "hZCCL_float.h"
+#include "ZCCL.h"
+#include "ZCCL_float.h"
 #include <assert.h>
 #include <math.h>
-#include "hZCCL_TypeManager.h"
-#include "hZCCL_BytesToolkit.h"
+#include "ZCCL_TypeManager.h"
+#include "ZCCL_BytesToolkit.h"
 
 #ifdef _OPENMP
 #include "omp.h"
 #endif
 
 unsigned char *
-hZCCL_float_openmp_direct_predict_quantization(float *oriData, size_t *outSize, float absErrBound,
+ZCCL_float_openmp_direct_predict_quantization(float *oriData, size_t *outSize, float absErrBound,
                                              size_t nbEle, int blockSize)
 {
 #ifdef _OPENMP
@@ -77,7 +77,7 @@ hZCCL_float_openmp_direct_predict_quantization(float *oriData, size_t *outSize, 
 }
 
 unsigned char *
-hZCCL_float_openmp_threadblock_predict_quantization(float *oriData, size_t *outSize, float absErrBound,
+ZCCL_float_openmp_threadblock_predict_quantization(float *oriData, size_t *outSize, float absErrBound,
                                                   size_t nbEle, int blockSize)
 {
 #ifdef _OPENMP
@@ -144,7 +144,7 @@ hZCCL_float_openmp_threadblock_predict_quantization(float *oriData, size_t *outS
 #endif
 }
 
-unsigned char *hZCCL_fast_compress_args(int fastMode, int dataType, void *data, size_t *outSize, int errBoundMode, float absErrBound,
+unsigned char *ZCCL_fast_compress_args(int fastMode, int dataType, void *data, size_t *outSize, int errBoundMode, float absErrBound,
                                       float relBoundRatio, size_t r5, size_t r4, size_t r3, size_t r2, size_t r1)
 {
     unsigned char *bytes = NULL;
@@ -173,35 +173,35 @@ unsigned char *hZCCL_fast_compress_args(int fastMode, int dataType, void *data, 
             printf("REAL ERROR BOUND IS %20f\n", realPrecision);
             if (fastMode == 1)
             {
-                bytes = hZCCL_float_openmp_threadblock(oriData, outSize, realPrecision,
+                bytes = ZCCL_float_openmp_threadblock(oriData, outSize, realPrecision,
                                                      length, blockSize);
             }
             else if (fastMode == 2)
             {
-                bytes = hZCCL_float_openmp_threadblock_randomaccess(oriData, outSize, realPrecision,
+                bytes = ZCCL_float_openmp_threadblock_randomaccess(oriData, outSize, realPrecision,
                                                                   length, blockSize);
             }
         }
         if (fastMode == 1)
         {
-            bytes = hZCCL_float_openmp_threadblock((float *)data, outSize, realPrecision,
+            bytes = ZCCL_float_openmp_threadblock((float *)data, outSize, realPrecision,
                                                  length, blockSize);
         }
         else if (fastMode == 2)
         {
-            bytes = hZCCL_float_openmp_threadblock_randomaccess((float *)data, outSize, realPrecision,
+            bytes = ZCCL_float_openmp_threadblock_randomaccess((float *)data, outSize, realPrecision,
                                                               length, blockSize);
         }
     }
     else
     {
-        printf("hZCCL only supports float type for now\n");
+        printf("ZCCL only supports float type for now\n");
     }
     return bytes;
 }
 
 unsigned char *
-hZCCL_float_openmp_threadblock(float *oriData, size_t *outSize, float absErrBound,
+ZCCL_float_openmp_threadblock(float *oriData, size_t *outSize, float absErrBound,
                              size_t nbEle, int blockSize)
 {
 #ifdef _OPENMP
@@ -573,7 +573,7 @@ hZCCL_float_openmp_threadblock(float *oriData, size_t *outSize, float absErrBoun
 #endif
 }
 
-void hZCCL_float_openmp_threadblock_arg(unsigned char *outputBytes, float *oriData, size_t *outSize, float absErrBound,
+void ZCCL_float_openmp_threadblock_arg(unsigned char *outputBytes, float *oriData, size_t *outSize, float absErrBound,
                                       size_t nbEle, int blockSize)
 {
 #ifdef _OPENMP
@@ -945,7 +945,7 @@ void hZCCL_float_openmp_threadblock_arg(unsigned char *outputBytes, float *oriDa
 #endif
 }
 
-void hZCCL_float_single_thread_arg(unsigned char *outputBytes, float *oriData, size_t *outSize, float absErrBound,
+void ZCCL_float_single_thread_arg(unsigned char *outputBytes, float *oriData, size_t *outSize, float absErrBound,
                                  size_t nbEle, int blockSize)
 {
 
@@ -1152,7 +1152,7 @@ void hZCCL_float_single_thread_arg(unsigned char *outputBytes, float *oriData, s
     free(offsets_perthread_arr);
 }
 
-size_t hZCCL_float_single_thread_arg_record(unsigned char *outputBytes, float *oriData, size_t *outSize, float absErrBound,
+size_t ZCCL_float_single_thread_arg_record(unsigned char *outputBytes, float *oriData, size_t *outSize, float absErrBound,
                                        size_t nbEle, int blockSize)
 {
 
@@ -1401,7 +1401,7 @@ size_t hZCCL_float_single_thread_arg_record(unsigned char *outputBytes, float *o
 }
 
 unsigned char *
-hZCCL_float_openmp_threadblock_randomaccess(float *oriData, size_t *outSize, float absErrBound,
+ZCCL_float_openmp_threadblock_randomaccess(float *oriData, size_t *outSize, float absErrBound,
                                           size_t nbEle, int blockSize)
 {
 #ifdef _OPENMP

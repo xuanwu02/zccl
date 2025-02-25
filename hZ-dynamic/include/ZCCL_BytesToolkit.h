@@ -5,8 +5,8 @@
  *  @date Feb, 2022
  */
 
-#ifndef _hZCCL_ByteToolkit_H
-#define _hZCCL_ByteToolkit_H
+#ifndef _ZCCL_ByteToolkit_H
+#define _ZCCL_ByteToolkit_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -69,5 +69,5 @@ void sizeToBytes(unsigned char* outBytes, size_t size);
 }
 #endif
 
-#endif /* ----- #ifndef _hZCCL_ByteToolkit_H  ----- */
+#endif /* ----- #ifndef _ZCCL_ByteToolkit_H  ----- */
 

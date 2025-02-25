@@ -7,9 +7,9 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT(hZCCL, 1.0, jhuan380@ucr.edu)
+AC_INIT(ZCCL, 1.0, jhuan380@ucr.edu)
 AM_INIT_AUTOMAKE([foreign -Wall -Werror subdir-objects])
-AC_CONFIG_SRCDIR([hZ-dynamic/src/hZCCL.c])
+AC_CONFIG_SRCDIR([hZ-dynamic/src/ZCCL.c])
 AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
@@ -139,5 +139,5 @@ AC_CHECK_FUNCS([memchr memset strchr strtol])
 
 AC_CONFIG_FILES([Makefile
                  hZ-dynamic/Makefile
-		 hZCCL/Makefile])
+		 ZCCL/Makefile])
 AC_OUTPUT

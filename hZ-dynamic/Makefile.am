@@ -7,14 +7,14 @@
 #LDFLAGS=-fPIC -shared
 
 AUTOMAKE_OPTIONS=foreign
-include_HEADERS=include/hZCCL.h include/hZCCL_rw.h include/hZCCL_defines.h include/hZCCL_BytesToolkit.h include/hZCCL_TypeManager.h include/hZCCL_dataCompression.h include/hZCCL_utility.h include/hZCCL_float.h include/hZCCLd_float.h include/hZCCL_helper.h
+include_HEADERS=include/ZCCL.h include/ZCCL_rw.h include/ZCCL_defines.h include/ZCCL_BytesToolkit.h include/ZCCL_TypeManager.h include/ZCCL_dataCompression.h include/ZCCL_utility.h include/ZCCL_float.h include/ZCCLd_float.h include/ZCCL_helper.h
 
-lib_LTLIBRARIES=libhZCCL.la
-libhZCCL_la_CFLAGS=-I./include
+lib_LTLIBRARIES=libZCCL.la
+libZCCL_la_CFLAGS=-I./include
 if OPENMP
-libhZCCL_la_CFLAGS+=-fopenmp
+libZCCL_la_CFLAGS+=-fopenmp
 endif
-libhZCCL_la_LDFLAGS = -version-info  1:0:0
-libhZCCL_la_SOURCES=src/hZCCL.c src/hZCCL_rw.c src/hZCCL_BytesToolkit.c src/hZCCL_TypeManager.c src/hZCCL_dataCompression.c src/hZCCL_utility.c src/hZCCL_float.c src/hZCCLd_float.c src/hZCCL_helper.c
+libZCCL_la_LDFLAGS = -version-info  1:0:0
+libZCCL_la_SOURCES=src/ZCCL.c src/ZCCL_rw.c src/ZCCL_BytesToolkit.c src/ZCCL_TypeManager.c src/ZCCL_dataCompression.c src/ZCCL_utility.c src/ZCCL_float.c src/ZCCLd_float.c src/ZCCL_helper.c
 
-libSZ_la_LINK= $(AM_V_CC)$(LIBTOOL) --tag=CC --mode=link $(CCLD) $(libhZCCL_la_CFLAGS) -O3 $(libhZCCL_la_LDFLAGS) -o $(lib_LTLIBRARIES)
+libSZ_la_LINK= $(AM_V_CC)$(LIBTOOL) --tag=CC --mode=link $(CCLD) $(libZCCL_la_CFLAGS) -O3 $(libZCCL_la_LDFLAGS) -o $(lib_LTLIBRARIES)

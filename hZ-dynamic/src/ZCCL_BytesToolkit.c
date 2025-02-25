@@ -6,9 +6,9 @@
  */
  
 #include <stdlib.h>
-#include "hZCCL.h" 	
-#include "hZCCL_BytesToolkit.h"
-#include "hZCCL_dataCompression.h"
+#include "ZCCL.h" 	
+#include "ZCCL_BytesToolkit.h"
+#include "ZCCL_dataCompression.h"
 
 inline void sz_writeBits_Fast_int8(unsigned char* buffer,uint64_t *bitPosPtr, int numBits, unsigned char data)
 {

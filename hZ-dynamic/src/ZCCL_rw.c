@@ -11,10 +11,10 @@
 #include <stdint.h>
 #include <unistd.h>
 
-#include "hZCCL_rw.h"
-#include "hZCCL.h"
-#include "hZCCL_BytesToolkit.h"
-#include "hZCCL_dataCompression.h"
+#include "ZCCL_rw.h"
+#include "ZCCL.h"
+#include "ZCCL_BytesToolkit.h"
+#include "ZCCL_dataCompression.h"
 
 int checkFileExistance(char* filePath)
 {

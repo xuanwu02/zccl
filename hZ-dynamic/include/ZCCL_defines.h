@@ -5,14 +5,14 @@
  *  @date Jan, 2022
  */
 
-#ifndef _hZCCL_DEFINES_H
-#define _hZCCL_DEFINES_H
+#ifndef _ZCCL_DEFINES_H
+#define _ZCCL_DEFINES_H
 
-#define hZCCL_VERNUM 0x0200
-#define hZCCL_VER_MAJOR 1
-#define hZCCL_VER_MINOR 0
-#define hZCCL_VER_BUILD 0
-#define hZCCL_VER_REVISION 0
+#define ZCCL_VERNUM 0x0200
+#define ZCCL_VER_MAJOR 1
+#define ZCCL_VER_MINOR 0
+#define ZCCL_VER_BUILD 0
+#define ZCCL_VER_REVISION 0
 
 #define ABS 0
 #define REL 1
@@ -47,10 +47,10 @@
 #define BIG_ENDIAN_SYSTEM 1
 
 
-#define hZCCL_NO_BLOCK_FAST_CMPR 1
-#define hZCCL_WITH_BLOCK_FAST_CMPR 2
-#define hZCCL_RANDOMACCESS_FAST_CMPR 3
-#define hZCCL_OPENMP_FAST_CMPR 4
+#define ZCCL_NO_BLOCK_FAST_CMPR 1
+#define ZCCL_WITH_BLOCK_FAST_CMPR 2
+#define ZCCL_RANDOMACCESS_FAST_CMPR 3
+#define ZCCL_OPENMP_FAST_CMPR 4
 
 //SUCCESS returning status
 #define SZ_SCES 0  //successful
@@ -61,4 +61,4 @@
 #define SZ_MERR -5 //sz_mode error
 #define SZ_BERR -6 //bound-mode error (should be only ABS, REL, ABS_AND_REL, ABS_OR_REL, or PW_REL)
 
-#endif /* _hZCCL_DEFINES_H */
+#endif /* _ZCCL_DEFINES_H */

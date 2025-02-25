@@ -7,7 +7,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "hZCCL_helper.h"
+#include "ZCCL_helper.h"
 
 
 BitArray* createBitArray(size_t size) {

@@ -9,17 +9,17 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdbool.h>
-#include "hZCCLd_float.h"
+#include "ZCCLd_float.h"
 #include <assert.h>
 #include <math.h>
-#include "hZCCL_TypeManager.h"
-#include "hZCCL_BytesToolkit.h"
+#include "ZCCL_TypeManager.h"
+#include "ZCCL_BytesToolkit.h"
 
 #ifdef _OPENMP
 #include "omp.h"
 #endif
 
-void hZCCL_float_decompress_openmp_threadblock(float **newData, size_t nbEle, float absErrBound, int blockSize, unsigned char *cmpBytes)
+void ZCCL_float_decompress_openmp_threadblock(float **newData, size_t nbEle, float absErrBound, int blockSize, unsigned char *cmpBytes)
 {
 #ifdef _OPENMP
     *newData = (float *)malloc(sizeof(float) * nbEle);
@@ -272,7 +272,7 @@ void hZCCL_float_decompress_openmp_threadblock(float **newData, size_t nbEle, fl
 #endif
 }
 
-void hZCCL_float_decompress_single_thread_arg(float *newData, size_t nbEle, float absErrBound, int blockSize, unsigned char *cmpBytes)
+void ZCCL_float_decompress_single_thread_arg(float *newData, size_t nbEle, float absErrBound, int blockSize, unsigned char *cmpBytes)
 {
 
     
@@ -415,7 +415,7 @@ void hZCCL_float_decompress_single_thread_arg(float *newData, size_t nbEle, floa
     free(temp_sign_arr);
 }
 
-size_t hZCCL_float_decompress_single_thread_arg_record(float *newData, size_t nbEle, float absErrBound, int blockSize, unsigned char *cmpBytes)
+size_t ZCCL_float_decompress_single_thread_arg_record(float *newData, size_t nbEle, float absErrBound, int blockSize, unsigned char *cmpBytes)
 {
     size_t total_memaccess = 0;
     
@@ -589,7 +589,7 @@ size_t hZCCL_float_decompress_single_thread_arg_record(float *newData, size_t nb
     return total_memaccess;
 }
 
-void hZCCL_float_decompress_openmp_threadblock_arg(float *newData, size_t nbEle, float absErrBound, int blockSize, unsigned char *cmpBytes)
+void ZCCL_float_decompress_openmp_threadblock_arg(float *newData, size_t nbEle, float absErrBound, int blockSize, unsigned char *cmpBytes)
 {
 #ifdef _OPENMP
     
@@ -838,7 +838,7 @@ void hZCCL_float_decompress_openmp_threadblock_arg(float *newData, size_t nbEle,
 #endif
 }
 
-void hZCCL_float_decompress_openmp_threadblock_randomaccess(float **newData, size_t nbEle, float absErrBound, int blockSize, unsigned char *cmpBytes)
+void ZCCL_float_decompress_openmp_threadblock_randomaccess(float **newData, size_t nbEle, float absErrBound, int blockSize, unsigned char *cmpBytes)
 {
 #ifdef _OPENMP
     *newData = (float *)malloc(sizeof(float) * nbEle);
@@ -1096,7 +1096,7 @@ void hZCCL_float_decompress_openmp_threadblock_randomaccess(float **newData, siz
 #endif
 }
 
-void hZCCL_float_homomophic_add_openmp_threadblock(unsigned char *final_cmpBytes, size_t *final_cmpSize, size_t nbEle, float absErrBound, int blockSize, unsigned char *cmpBytes, unsigned char *cmpBytes2)
+void ZCCL_float_homomophic_add_openmp_threadblock(unsigned char *final_cmpBytes, size_t *final_cmpSize, size_t nbEle, float absErrBound, int blockSize, unsigned char *cmpBytes, unsigned char *cmpBytes2)
 {
 #ifdef _OPENMP
     
@@ -1897,7 +1897,7 @@ void hZCCL_float_homomophic_add_openmp_threadblock(unsigned char *final_cmpBytes
 #endif
 }
 
-void hZCCL_float_homomophic_add_single_thread(unsigned char *final_cmpBytes, size_t *final_cmpSize, size_t nbEle, float absErrBound, int blockSize, unsigned char *cmpBytes, unsigned char *cmpBytes2)
+void ZCCL_float_homomophic_add_single_thread(unsigned char *final_cmpBytes, size_t *final_cmpSize, size_t nbEle, float absErrBound, int blockSize, unsigned char *cmpBytes, unsigned char *cmpBytes2)
 {
 
     
@@ -2336,7 +2336,7 @@ void hZCCL_float_homomophic_add_single_thread(unsigned char *final_cmpBytes, siz
     free(offsets_perthread_arr);
 }
 
-void hZCCL_float_homomophic_add_openmp_threadblock_record(unsigned char *final_cmpBytes, size_t *final_cmpSize, size_t nbEle, float absErrBound, int blockSize, unsigned char *cmpBytes, unsigned char *cmpBytes2, int *total_counter_1, int *total_counter_2, int *total_counter_3, int *total_counter_4)
+void ZCCL_float_homomophic_add_openmp_threadblock_record(unsigned char *final_cmpBytes, size_t *final_cmpSize, size_t nbEle, float absErrBound, int blockSize, unsigned char *cmpBytes, unsigned char *cmpBytes2, int *total_counter_1, int *total_counter_2, int *total_counter_3, int *total_counter_4)
 {
 #ifdef _OPENMP
     

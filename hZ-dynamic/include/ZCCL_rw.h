@@ -5,8 +5,8 @@
  *  @date Jan, 2022
  */
 
-#ifndef _hZCCL_RW_H
-#define _hZCCL_RW_H
+#ifndef _ZCCL_RW_H
+#define _ZCCL_RW_H
 
 #include <stdio.h>
 #include <stdint.h>
@@ -84,4 +84,4 @@ void writefloatfile_(float *data, size_t *nbEle, char *tgtFilePath, int *len);
 }
 #endif
 
-#endif /* ----- #ifndef _hZCCL_RW_H  ----- */
+#endif /* ----- #ifndef _ZCCL_RW_H  ----- */
