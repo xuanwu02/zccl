@@ -139,5 +139,5 @@ AC_CHECK_FUNCS([memchr memset strchr strtol])
 
 AC_CONFIG_FILES([Makefile
                  ZCCL/Makefile
-		 ZCCL/Makefile])
+		 examples/Makefile])
 AC_OUTPUT
