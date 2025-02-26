@@ -5,6 +5,7 @@
  *  @date Feb, 2024
  */
 
+#include "ZCCL.h"
 #include "ZCCL_utils.h"
 
 void get_4_digits(int input, int *output)
