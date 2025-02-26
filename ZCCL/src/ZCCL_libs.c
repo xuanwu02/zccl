@@ -5,10 +5,7 @@
  *  @date Feb, 2024
  */
 
-#ifndef _libs_H
-#define _libs_H
-
-// #include <immintrin.h>
+#include "ZCCL_libs.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -42,5 +39,3 @@ void add_vectors(float *result, const float *a, const float *b, int n)
         result[i] = a[i] + b[i];
     }
 }
-
-#endif /* ----- #ifndef _libs_H  ----- */

@@ -33,7 +33,7 @@ KERNELMIN=0
 NROUNDS=1
 START_SCALE=2
 # Run My Program
-cd $XXX/hZCC-artifact/install/bin
+cd $XXX/ZCCL/install/bin
 echo
 echo -e "Running compression-accelerated allreduce with different node counts\n"
 

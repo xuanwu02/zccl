@@ -9,7 +9,7 @@
 AC_PREREQ([2.69])
 AC_INIT(ZCCL, 1.0, jhuan380@ucr.edu)
 AM_INIT_AUTOMAKE([foreign -Wall -Werror subdir-objects])
-AC_CONFIG_SRCDIR([hZ-dynamic/src/ZCCL.c])
+AC_CONFIG_SRCDIR([ZCCL/src/ZCCL.c])
 AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
@@ -138,6 +138,6 @@ AC_FUNC_REALLOC
 AC_CHECK_FUNCS([memchr memset strchr strtol])
 
 AC_CONFIG_FILES([Makefile
-                 hZ-dynamic/Makefile
-		 ZCCL/Makefile])
+                 ZCCL/Makefile
+		 examples/Makefile])
 AC_OUTPUT

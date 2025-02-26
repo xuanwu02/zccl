@@ -7,8 +7,7 @@
 #include <stdio.h>
 #include "mpi.h"
 #include "ZCCL.h"
-
-#include "./include/libs.h"
+#include "ZCCL_broadcast.h"
 
 int MPI_Bcast_ZCCL(void *buffer,
     float compressionRatio,

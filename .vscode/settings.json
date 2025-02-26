@@ -1,0 +1,9 @@
+{
+    "files.associations": {
+        "mpi.h": "c",
+        "zccl_broadcast.h": "c",
+        "zccl_ring_ho.h": "c",
+        "zccl.h": "c",
+        "stdlib.h": "c"
+    }
+}

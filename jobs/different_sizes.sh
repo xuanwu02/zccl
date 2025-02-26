@@ -28,7 +28,7 @@ NUMTHREADS=18
 
 NROUNDS=1
 # Run My Program
-cd $XXX/hZCC-artifact/install/bin
+cd $XXX/ZCCL/install/bin
 
 echo -e "Running compression-accelerated allreduce with different data sizes\n"
 

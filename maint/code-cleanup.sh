@@ -9,7 +9,7 @@ set -euo pipefail
 # Format all C/C++ files in the project
 format_all() {
     echo "Formatting all C/C++ files..."
-    find ZCCL/ hZ-dynamic/src/ -type f \( -name '*.c' -o -name '*.h' \) -exec clang-format -i {} \;
+    find ZCCL/src/ examples/ -type f \( -name '*.c' -o -name '*.h' \) -exec clang-format -i {} \;
 }
 
 # Format only files tracked by git
@@ -34,7 +34,7 @@ format_staged() {
 # Dry run to check formatting
 dry_run() {
     echo "Checking formatting..."
-    find ZCCL/ hZ-dynamic/src/ -type f \( -name '*.c' -o -name '*.h' \) -exec clang-format --Werror --dry-run {} \;
+    find ZCCL/src/ examples/ -type f \( -name '*.c' -o -name '*.h' \) -exec clang-format --Werror --dry-run {} \;
 }
 
 # Show help
