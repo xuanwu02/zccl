@@ -9,16 +9,17 @@
 #include <stdlib.h>
 #include "ZCCL_helper.h"
 
-
-BitArray* createBitArray(size_t size) {
-    BitArray* bitArray = (BitArray*)malloc(sizeof(BitArray));
+BitArray *createBitArray(size_t size)
+{
+    BitArray *bitArray = (BitArray *) malloc(sizeof(BitArray));
     size_t numBytes = (size + 7) / 8; // Round up to nearest byte
-    bitArray->array = (unsigned char*)calloc(numBytes, sizeof(unsigned char));
+    bitArray->array = (unsigned char *) calloc(numBytes, sizeof(unsigned char));
     bitArray->size = size;
     return bitArray;
 }
 
-void setBit(BitArray* bitArray, size_t index, int value) {
+void setBit(BitArray *bitArray, size_t index, int value)
+{
     if (index >= bitArray->size) {
         fprintf(stderr, "Index out of bounds\n");
         return;
@@ -32,7 +33,8 @@ void setBit(BitArray* bitArray, size_t index, int value) {
     }
 }
 
-int getBit(BitArray* bitArray, size_t index) {
+int getBit(BitArray *bitArray, size_t index)
+{
     if (index >= bitArray->size) {
         fprintf(stderr, "Index out of bounds\n");
         return -1;
@@ -42,7 +44,8 @@ int getBit(BitArray* bitArray, size_t index) {
     return (bitArray->array[byteIndex] & (1 << bitPosition)) != 0;
 }
 
-void freeBitArray(BitArray* bitArray) {
+void freeBitArray(BitArray *bitArray)
+{
     free(bitArray->array);
     free(bitArray);
 }

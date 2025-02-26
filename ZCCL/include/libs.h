@@ -35,10 +35,10 @@ typedef float data_type;
 #define PRINT_EXPERIMENTS 1
 #define tag_base 100
 
-
-void add_vectors(float *result, const float *a, const float *b, int n) {
-    #pragma omp parallel for
-    for(int i = 0; i < n; i++) {
+void add_vectors(float *result, const float *a, const float *b, int n)
+{
+#pragma omp parallel for
+    for (int i = 0; i < n; i++) {
         result[i] = a[i] + b[i];
     }
 }
