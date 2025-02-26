@@ -7,8 +7,7 @@
 #include <stdio.h>
 #include "mpi.h"
 #include "ZCCL.h"
-
-#include "./include/libs.h"
+#include "ZCCL_ring_ho.h"
 
 int MPIR_Allgatherv_intra_ring_RI2_mt_oa_ho_record(const void *sendbuf,
     MPI_Aint sendcount,

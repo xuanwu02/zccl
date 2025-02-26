@@ -19,6 +19,12 @@
 #include "ZCCL_float.h"
 #include "ZCCLd_float.h"
 #include "ZCCL_TypeManager.h"
+#include "ZCCL_libs.h"
+#include "ZCCL_utils.h"
+#include "ZCCL_scatter.h"
+#include "ZCCL_broadcast.h"
+#include "ZCCL_ring_ho.h"
+#include "ZCCL_ring.h"
 
 #ifdef _WIN32
 #define PATH_SEPARATOR ';'

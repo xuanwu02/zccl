@@ -4,4 +4,4 @@
 ##
 
 AUTOMAKE_OPTIONS=foreign
-SUBDIRS = hZ-dynamic ZCCL
+SUBDIRS = ZCCL examples

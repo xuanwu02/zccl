@@ -7,8 +7,7 @@
 #include <stdio.h>
 #include "mpi.h"
 #include "ZCCL.h"
-
-#include "./include/libs.h"
+#include "ZCCL_scatter.h"
 
 int MPIR_Scatter_ZCCL(const void *sendbuf,
                                        float compressionRatio,

@@ -8,13 +8,11 @@
 #include <stdio.h>
 #include <stdint.h>
 #include "mpi.h"
-#include "ring2_multithreads.h"
-#include "ring2_ho_multithreads.h"
+#include "ZCCL.h"
 #include <stdlib.h>
 #include <unistd.h>
 #include <getopt.h>
 #include <stdbool.h>
-#include "./include/utils.h"
 
 #define ITERATIONS_LARGE 100
 #define LARGE_MESSAGE_SIZE 1024 * 1024

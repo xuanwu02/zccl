@@ -22,7 +22,7 @@ DIR_5=$XXX/SDRBENCH-EXASKY-NYX-512x512x512/velocity_y.f32
 DIR_6=$XXX/SDRBENCH-EXASKY-NYX-512x512x512/velocity_z.f32
 
 # Run My Program
-cd $XXX/hZCC-artifact/install/bin
+cd $XXX/ZCCL/install/bin
 echo -e "\n"
 echo -e "Evaluate hZ-dynamic with traditional DOC workflow\n"
 
