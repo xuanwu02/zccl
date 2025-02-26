@@ -32,7 +32,7 @@ show_help() {
 }
 
 # Main script execution
-case "$1" in
+case "${1:-}" in  # Use parameter expansion to handle unset variable
     ""|--all)
         format_all
         ;;
