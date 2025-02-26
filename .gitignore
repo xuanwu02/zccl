@@ -108,3 +108,4 @@ ltmain.sh
 missing
 
 libtool
+.aider*
