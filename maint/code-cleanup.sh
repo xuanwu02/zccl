@@ -1,4 +1,9 @@
 #!/bin/bash
+##
+## Copyright (C) by Argonne National Laboratory
+##     See COPYRIGHT in top-level directory
+##
+
 set -euo pipefail
 
 # Format all C/C++ files in the project
