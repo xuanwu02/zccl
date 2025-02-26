@@ -13,6 +13,19 @@ format_git() {
     git ls-files '*.c' '*.h' | xargs clang-format -i
 }
 
+# Format only staged files
+format_staged() {
+    echo "Formatting staged C/C++ files..."
+    STAGED_FILES=$(git diff --cached --name-only --diff-filter=d -- '*.c' '*.h')
+    if [ -z "$STAGED_FILES" ]; then
+        echo "No staged C/C++ files to format."
+        return
+    fi
+    echo "$STAGED_FILES" | xargs -r clang-format -i
+    echo "$STAGED_FILES" | xargs -r git add
+    echo "Formatted and re-staged changes"
+}
+
 # Dry run to check formatting
 dry_run() {
     echo "Checking formatting..."
@@ -26,7 +39,8 @@ show_help() {
     echo ""
     echo "Options:"
     echo "  --all      Format all C/C++ files (default)"
-    echo "  --git      Format only git-tracked files"
+    echo "  --git      Format only git-tracked files" 
+    echo "  --staged   Format only staged files and re-stage changes"
     echo "  --dry-run  Check formatting without changes"
     echo "  --help     Show this help message"
 }
@@ -38,6 +52,9 @@ case "${1:-}" in  # Use parameter expansion to handle unset variable
         ;;
     --git)
         format_git
+        ;;
+    --staged)
+        format_staged
         ;;
     --dry-run)
         dry_run

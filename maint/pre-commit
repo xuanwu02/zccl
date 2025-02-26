@@ -1,0 +1,27 @@
+#!/bin/sh
+set -e
+
+# Check only staged C/C++ files
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=d -- '*.c' '*.h')
+
+if [ -n "$STAGED_FILES" ]; then
+    # Verify formatting using temporary copies of staged content
+    TMPDIR=$(mktemp -d)
+    trap 'rm -rf "$TMPDIR"' EXIT
+    
+    FORMAT_FAIL=0
+    for file in $STAGED_FILES; do
+        mkdir -p "$TMPDIR/$(dirname "$file")"
+        git show ":$file" > "$TMPDIR/$file"
+        if ! clang-format --Werror --dry-run "$TMPDIR/$file" >/dev/null 2>&1; then
+            echo "Formatting issues in: $file"
+            FORMAT_FAIL=1
+        fi
+    done
+
+    if [ $FORMAT_FAIL -ne 0 ]; then
+        echo "Error: Code formatting violations detected in staged files."
+        echo "Run './maint/code-cleanup.sh --staged' to auto-format and stage changes."
+        exit 1
+    fi
+fi
