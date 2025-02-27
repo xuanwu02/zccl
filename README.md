@@ -1,7 +1,7 @@
 # ZCCL: The Compression-accelerated Collective Communications Library
 
 * Developer and maintainer: ZCCL.org ([Team Members](https://zccl.org/team/))
-* Contact: jhuan380@ucr.edu
+* Contact: zcclorg@gmail.com
 
 This is the official repo of ZCCL, The Compression-accelerated Collective Communications Library. ZCCL is based on the following research works.
 
