@@ -5,8 +5,13 @@
 
 This is the official repo of ZCCL, The Compression-accelerated Collective Communications Library. ZCCL is based on the following research works.
 
-* hZCCL [SC '24] https://dl.acm.org/doi/10.1109/SC41406.2024.00110
-* ZCCL [IPDPS '24] https://www.computer.org/csdl/proceedings-article/ipdps/2024/871100a752/1YpzZT6urCg
+- **hZCCL**:
+[SC '24] https://dl.acm.org/doi/10.1109/SC41406.2024.00110
+- **ZCCL**: 
+[IPDPS '24] https://www.computer.org/csdl/proceedings-article/ipdps/2024/871100a752/1YpzZT6urCg 
+[Journal Extension] https://arxiv.org/abs/2502.18554
+
+
 
 ## About ZCCL
 
@@ -20,8 +25,18 @@ If you find ZCCL useful in your research or applications, we kindly invite you t
     ```bibtex
     @inproceedings{huang2023ccoll,
         title={An Optimized Error-controlled MPI Collective Framework Integrated with Lossy Compression},
-        author = {Huang, Jiajun and Di, Sheng and Yu, Xiaodong and Zhai, Yujia and Liu, Jinyang and Jian, Zizhe and Liang, Xin and Zhao, Kai and Lu, Xiaoyi and Chen, Zizhong and Cappello, Franck and Guo, Yanfei and Thakur, Rajeev},
+        author = {Huang, Jiajun and Di, Sheng and Yu, Xiaodong and Zhai, Yujia and Zhang, Zhaorui and Liu, Jinyang and Lu, Xiaoyi and Raffenetti, Ken and Zhou, Hui and Zhao, Kai and Chen, Zizhong and Cappello, Franck and Guo, Yanfei and Thakur, Rajeev},
         booktitle = {Proceedings of the 2024 IEEE International Parallel and Distributed Processing Symposium (IPDPS)},
+        year = {2024}
+    }
+    ```
+
+- **[Journal Extension]** ZCCL: Significantly Improving Collective Communication With Error-Bounded Lossy Compression
+    ```bibtex
+    @misc{huang2024ZCCL,
+        title={ZCCL: Significantly Improving Collective Communication With Error-Bounded Lossy Compression},
+        author = {Huang, Jiajun and Di, Sheng and Yu, Xiaodong and Zhai, Yujia and Zhang, Zhaorui and Liu, Jinyang and Lu, Xiaoyi and Raffenetti, Ken and Zhou, Hui and Zhao, Kai and Chen, Zizhong and Cappello, Franck and Guo, Yanfei and Thakur, Rajeev},
+        url={https://arxiv.org/abs/2502.18554},
         year = {2024}
     }
     ```
