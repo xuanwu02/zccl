@@ -58,4 +58,14 @@ int MPI_Allreduce_ZCCL_RI2_st_oa_record(const void *sendbuf,
     MPI_Op op,
     MPI_Comm comm);
 
+int MPI_Allreduce_ZCCL_RI2_st_oa_op_record(const void *sendbuf,
+    void *recvbuf,
+    float compressionRatio,
+    float tolerance,
+    int blockSize,
+    MPI_Aint count,
+    MPI_Datatype datatype,
+    MPI_Op op,
+    MPI_Comm comm);
+
 #endif /* ----- #ifndef ZCCL_ring_H  ----- */
