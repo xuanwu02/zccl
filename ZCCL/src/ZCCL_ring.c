@@ -601,3 +601,192 @@ int MPI_Allreduce_ZCCL_RI2_st_oa_record(const void *sendbuf,
 
     return mpi_errno;
 }
+
+int MPI_Allreduce_ZCCL_RI2_st_oa_op_record(const void *sendbuf,
+    void *recvbuf,
+    float compressionRatio,
+    float tolerance,
+    int blockSize,
+    MPI_Aint count,
+    MPI_Datatype datatype,
+    MPI_Op op,
+    MPI_Comm comm)
+{
+    int mpi_errno = MPI_SUCCESS, mpi_errno_ret = MPI_SUCCESS;
+    int i, src, dst;
+    int nranks, is_inplace, rank;
+    size_t extent;
+    MPI_Aint lb, true_extent;
+    MPI_Aint *cnts, *displs;
+    int send_rank, recv_rank, total_count;
+    int tmp_len = 0;
+    double absErrBound = compressionRatio;
+
+    tmp_len = count;
+
+    void *tmpbuf;
+    int tag;
+    MPI_Request reqs[2];
+    MPI_Status stas[2];
+    extent = sizeof(datatype);
+    is_inplace = (sendbuf == MPI_IN_PLACE);
+    MPI_Comm_rank(comm, &rank);
+    MPI_Comm_size(comm, &nranks);
+
+    size_t outSize;
+    size_t byteLength;
+
+    cnts = (MPI_Aint *) malloc(nranks * sizeof(MPI_Aint));
+    assert(cnts != NULL);
+    displs = (MPI_Aint *) malloc(nranks * sizeof(MPI_Aint));
+    assert(displs != NULL);
+
+    for (i = 0; i < nranks; i++)
+        cnts[i] = 0;
+
+    total_count = 0;
+    for (i = 0; i < nranks; i++) {
+        cnts[i] = (count + nranks - 1) / nranks;
+        if (total_count + cnts[i] > count) {
+            cnts[i] = count - total_count;
+            break;
+        } else
+            total_count += cnts[i];
+    }
+
+    displs[0] = 0;
+    for (i = 1; i < nranks; i++)
+        displs[i] = displs[i - 1] + cnts[i - 1];
+
+    if (!is_inplace) {
+        memcpy(recvbuf, sendbuf, sizeof(datatype) * count);
+    }
+
+    tmpbuf = (void *) malloc(tmp_len * extent);
+    int chunk_size;
+    chunk_size = SINGLETHREAD_CHUNK_SIZE;
+    int chunk_num = cnts[0] / chunk_size;
+    unsigned char *outputBytes =
+        (unsigned char *) malloc(tmp_len * extent + sizeof(size_t) * (chunk_num + 1));
+    float *newData = (float *) malloc(cnts[0] * extent);
+
+    src = (nranks + rank - 1) % nranks;
+    dst = (rank + 1) % nranks;
+
+    for (i = 0; i < nranks - 1; i++) {
+        recv_rank = (nranks + rank - 2 - i) % nranks;
+        send_rank = (nranks + rank - 1 - i) % nranks;
+
+        tag = tag_base;
+
+        mpi_errno = MPI_Irecv(tmpbuf, cnts[recv_rank] * extent, MPI_BYTE, src, tag, comm, &reqs[0]);
+        if (mpi_errno) {
+            exit(-1);
+        }
+
+        outSize = 0;
+        chunk_num = cnts[send_rank] / chunk_size;
+        int chunk_remainder_size = cnts[send_rank] % chunk_size;
+        int flag, iter;
+        size_t chunk_out_size = 0;
+
+        for (iter = 0; iter < chunk_num; iter++) {
+            MPI_Test(&reqs[0], &flag, &stas[0]);
+            ZCCL_float_single_thread_arg_split_record(
+                outputBytes + outSize + sizeof(size_t) * (chunk_num + 1),
+                (char *) recvbuf + displs[send_rank] * extent + iter * chunk_size * extent,
+                &chunk_out_size,
+                absErrBound,
+                chunk_size,
+                blockSize,
+                outputBytes,
+                iter);
+            outSize += chunk_out_size;
+        }
+        if (chunk_remainder_size != 0) {
+            MPI_Test(&reqs[0], &flag, &stas[0]);
+
+            ZCCL_float_single_thread_arg_split_record(
+                outputBytes + outSize + sizeof(size_t) * (chunk_num + 1),
+                (char *) recvbuf + displs[send_rank] * extent + iter * chunk_size * extent,
+                &chunk_out_size,
+                absErrBound,
+                chunk_remainder_size,
+                blockSize,
+                outputBytes,
+                iter);
+
+            outSize += chunk_out_size;
+        }
+        unsigned char *bytes = outputBytes;
+        mpi_errno = MPI_Isend(bytes,
+            (outSize + sizeof(size_t) * (chunk_num + 1)),
+            MPI_BYTE,
+            dst,
+            tag,
+            comm,
+            &reqs[1]);
+        if (mpi_errno) {
+            exit(-1);
+        }
+        MPI_Wait(&reqs[0], &stas[0]);
+
+        outSize = 0;
+        chunk_num = cnts[recv_rank] / chunk_size;
+        chunk_remainder_size = cnts[recv_rank] % chunk_size;
+        chunk_out_size = 0;
+        int decom_offset = 0;
+        int decom_out_offset = 0;
+        size_t *chunk_arr = (size_t *) tmpbuf;
+        unsigned char *cmpBytes;
+        for (iter = 0; iter < chunk_num; iter++) {
+            MPI_Test(&reqs[1], &flag, &stas[1]);
+            cmpBytes = (unsigned char *) tmpbuf + sizeof(size_t) * (chunk_num + 1) + decom_offset;
+            ZCCL_float_decompress_single_thread_arg((unsigned char *) newData + decom_out_offset,
+                chunk_size,
+                absErrBound,
+                blockSize,
+                cmpBytes);
+            decom_offset += chunk_arr[iter];
+            decom_out_offset += chunk_size * extent;
+        }
+        if (chunk_remainder_size != 0) {
+            MPI_Test(&reqs[1], &flag, &stas[1]);
+            cmpBytes = (unsigned char *) tmpbuf + sizeof(size_t) * (chunk_num + 1) + decom_offset;
+            ZCCL_float_decompress_single_thread_arg((unsigned char *) newData + decom_out_offset,
+                chunk_remainder_size,
+                absErrBound,
+                blockSize,
+                cmpBytes);
+        }
+        mpi_errno = MPI_Reduce_local(
+            newData, (char *) recvbuf + displs[recv_rank] * extent, cnts[recv_rank], datatype, op);
+        MPI_Wait(&reqs[1], &stas[1]);
+        if (mpi_errno) {
+            exit(-1);
+        }
+    }
+
+    mpi_errno = MPIR_Allgatherv_intra_ring_RI2_st_oa_record(MPI_IN_PLACE,
+        -1,
+        MPI_DATATYPE_NULL,
+        recvbuf,
+        cnts,
+        displs,
+        datatype,
+        comm,
+        outputBytes,
+        compressionRatio,
+        tolerance,
+        blockSize);
+    if (mpi_errno) {
+        exit(-1);
+    }
+
+    free(outputBytes);
+    free(newData);
+    free(cnts);
+    free(displs);
+    free(tmpbuf);
+    return mpi_errno;
+}
