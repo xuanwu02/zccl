@@ -35,7 +35,7 @@ If you find ZCCL useful in your research or applications, we kindly invite you t
     ```bibtex
     @misc{huang2024ZCCL,
         title={ZCCL: Significantly Improving Collective Communication With Error-Bounded Lossy Compression},
-        author = {Huang, Jiajun and Di, Sheng and Yu, Xiaodong and Zhai, Yujia and Zhang, Zhaorui and Liu, Jinyang and Lu, Xiaoyi and Raffenetti, Ken and Zhou, Hui and Zhao, Kai and Chen, Zizhong and Cappello, Franck and Guo, Yanfei and Thakur, Rajeev},
+        author = {Huang, Jiajun and Di, Sheng and Yu, Xiaodong and Zhai, Yujia and Zhang, Zhaorui and Liu, Jinyang and Lu, Xiaoyi and Raffenetti, Ken and Zhou, Hui and Zhao, Kai and Alharthi, Khalid, and Chen, Zizhong and Cappello, Franck and Guo, Yanfei and Thakur, Rajeev},
         url={https://arxiv.org/abs/2502.18554},
         year = {2024}
     }
