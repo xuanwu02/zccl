@@ -39,7 +39,7 @@ echo -e "Running compression-accelerated allreduce with different node counts\n"
 
 echo -e "NNODES: $NNODES, BLOCKSIZE: $BLOCKSIZE, ERRORBOUND: $ERRORBOUND, KERNELMAX: $KERNELMAX, KERNELMIN: $KERNELMIN\n"
 
-let "NUMTHREADS=18"
+let "NUMTHREADS=16"
 
 let "SIZEMAX=$XXX"
 
