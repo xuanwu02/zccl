@@ -10,7 +10,7 @@
 #SBATCH --time=02:00:00
 
 # Setup My Environment
-export OMP_NUM_THREADS=36
+export OMP_NUM_THREADS=32
 
 
 
