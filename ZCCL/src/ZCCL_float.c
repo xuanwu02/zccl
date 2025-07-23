@@ -759,11 +759,11 @@ void ZCCL_float_openmp_threadblock_arg(unsigned char *outputBytes,
                         outSize_perthread++;
                         block_pointer++;
                         signbytelength = convertIntArray2ByteArray_fast_1b_args(
-                            temp_sign_arr, num_remainder_in_tb, block_pointer);
+                            temp_sign_arr, num_remainder_in_rm, block_pointer);
                         block_pointer += signbytelength;
                         outSize_perthread += signbytelength;
                         savedbitsbytelength = Jiajun_save_fixed_length_bits(
-                            temp_predict_arr, num_remainder_in_tb, block_pointer, bit_count);
+                            temp_predict_arr, num_remainder_in_rm, block_pointer, bit_count);
                         block_pointer += savedbitsbytelength;
                         outSize_perthread += savedbitsbytelength;
                     }

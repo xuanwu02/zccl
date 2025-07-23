@@ -109,3 +109,8 @@ missing
 
 libtool
 .aider*
+
+# personal file
+testfloat_compresss_decompress.c.bak
+testfloat_homocompress_fastmode1_arg
+testfloat_homocompress_fastmode1_arg.c.bak
