@@ -72,3 +72,8 @@ make install
 # Change to the jobs directory to proceed with running the ZCCL:
 cd jobs
 ```
+### Installation Note
+1. if seeing `configure.ac:22: error possibly undefinded macro: AC_PROG_LIBTOOL` when running command `./autogen.sh`, simply replace 'AC_PROG_LIBTOOL' with 'LT_INIT' at line 22 on 'configure.ac'.
+2. Some prerequisite packages needed in Linux system
+    - 'sudo apt update && sudo apt-get install libtool automake autoconf mpich'
+3. You may encounter broken MPI environment setup in some virtual environments like WSL2, please consider installing 'openmpi-bin' and 'libopenmpi-dev' then. OpenMPI is often more robust in virtual desktop and WSL environments.
