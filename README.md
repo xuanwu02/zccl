@@ -73,6 +73,6 @@ make install
 cd jobs
 ```
 ### Installation Note
-1. if seeing `configure.ac:22: error possibly undefinded macro: AC_PROG_LIBTOOL` when running command `./autogen.sh`, simply replace 'AC_PROG_LIBTOOL' with 'LT_INIT' at line 22 on 'configure.ac'.
+1. If seeing `configure.ac:22: error possibly undefinded macro: AC_PROG_LIBTOOL` when running command `./autogen.sh`, simply replace 'AC_PROG_LIBTOOL' with 'LT_INIT' at line 22 in 'configure.ac'.
 2. Some prerequisite packages you may need: 'libtool', 'automake', 'autoconf'. 
 3. Consider building MPICH from source for the best performance and reliability.
