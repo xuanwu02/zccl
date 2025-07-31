@@ -45,7 +45,7 @@ void add_vectors(float *result, const float *a, const float *b, int n)
     }
 }
 
-void error_evaluation(float *oriData, float *decData, size_t nbEle, size_t cmpSize)
+void error_evaluation(float *oriData, float *decData, size_t nbEle, size_t cmpSize, float absErrBound)
 {
     size_t i = 0;
     float Max = 0, Min = 0, diffMax = 0;
@@ -64,6 +64,7 @@ void error_evaluation(float *oriData, float *decData, size_t nbEle, size_t cmpSi
     double sum = 0, prodSum = 0, relerr = 0;
 
     double maxpw_relerr = 0;
+    size_t maxErrIdx = 0;
     for (i = 0; i < nbEle; i++) {
         if (Max < oriData[i])
             Max = oriData[i];
@@ -72,16 +73,18 @@ void error_evaluation(float *oriData, float *decData, size_t nbEle, size_t cmpSi
 
         float err = fabs(decData[i] - oriData[i]);
         if (oriData[i] != 0) {
-            if (fabs(oriData[i]) > 1)
+            if (fabs(oriData[i]) > absErrBound)
                 relerr = err / oriData[i];
             else
-                relerr = err;
+                relerr = err; // skip points that appears to be noise or small value
             if (maxpw_relerr < relerr)
                 maxpw_relerr = relerr;
         }
 
-        if (diffMax < err)
+        if (diffMax < err){
             diffMax = err;
+            maxErrIdx = i;
+        }
         prodSum += (oriData[i] - mean1) * (decData[i] - mean2);
         sum3 += (oriData[i] - mean1) * (oriData[i] - mean1);
         sum4 += (decData[i] - mean2) * (decData[i] - mean2);
@@ -103,11 +106,11 @@ void error_evaluation(float *oriData, float *decData, size_t nbEle, size_t cmpSi
     printf("Max absolute error = %.10f\n", diffMax);
     printf("Max relative error = %f\n", diffMax / (Max - Min));
     printf("Max pw relative error = %f\n", maxpw_relerr);
+    printf("Max error at position %d: True= %f, Pred= %f\n",maxErrIdx, oriData[maxErrIdx], decData[maxErrIdx]);
     printf("PSNR = %.3f, NRMSE= %.5G\n", psnr, nrmse);
     printf("acEff=%f\n", acEff);
     printf("Compression Ratio = %f\n", compressionRatio);
 }
-
 float computeValueRange_float(float *oriData, size_t length, float *radius, float *medianValue)
 {
     float min = oriData[0];
@@ -186,6 +189,7 @@ int main(int argc, char *argv[])
     }
 
     float errBound = larger_range * relerrorBound;
+    printf("Actual absolute error bound: %f\n", errBound);
 
     for (size_t i = 0; i < ITERATIONS; i++) {
         add_vectors(addoriData, oriData, oriData2, nbEle);
@@ -231,11 +235,12 @@ int main(int argc, char *argv[])
     normal_com_cost = totalCost / ITERATIONS;
 
     normal_total_cost = normal_decom_cost + normal_cpt_cost + normal_com_cost;
+    printf("==================================\n");
     printf(
         "Traditional DOC workflow (decompression+operation+compression) performance: time: %f s, throughput: %f GBps\n",
         normal_total_cost,
         nbEle * sizeof(float) / normal_total_cost / 1000 / 1000 / 1000);
-
+    printf("==================================\n");
     cost_start();
 
     for (size_t i = 0; i < ITERATIONS; i++) {
@@ -244,10 +249,12 @@ int main(int argc, char *argv[])
     }
     cost_end();
     homo_total_cost = totalCost / ITERATIONS;
+    printf("==================================\n");
     printf("hZ-dynamic performance: time: %f s, throughput: %f GBps\n",
         homo_total_cost,
         nbEle * sizeof(float) / homo_total_cost / 1000 / 1000 / 1000);
     printf("hZ-dynamic speedup: %0.2fX\n", normal_total_cost / homo_total_cost);
+    printf("==================================\n");
     cost_start();
     for (size_t i = 0; i < ITERATIONS; i++) {
         ZCCL_float_decompress_openmp_threadblock_arg(
@@ -261,11 +268,14 @@ int main(int argc, char *argv[])
             adddecData_2, nbEle, errBound, blockSize, addcmpData_normal);
     }
     cost_end();
-
+    printf("==================================\n");
     printf("Traditioanl DOC workflow quality:\n");
-    error_evaluation(addoriData, adddecData_2, nbEle, addcmpSize_normal);
+    error_evaluation(addoriData, adddecData_2, nbEle, addcmpSize_normal, errBound);
+    printf("==================================\n");
+    printf("==================================\n");
     printf("hZ-dynamic quality:\n");
-    error_evaluation(addoriData, adddecData, nbEle, addcmpSize);
+    error_evaluation(addoriData, adddecData, nbEle, addcmpSize, errBound);
+    printf("==================================\n");
 
     printf("\n");
 

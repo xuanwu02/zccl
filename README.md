@@ -72,3 +72,8 @@ make install
 # Change to the jobs directory to proceed with running the ZCCL:
 cd jobs
 ```
+### Installation Note
+1. if seeing `configure.ac:22: error possibly undefinded macro: AC_PROG_LIBTOOL` when running command `./autogen.sh`, simply replace 'AC_PROG_LIBTOOL' with 'LT_INIT' at line 22 on 'configure.ac'.
+2. Some prerequisite packages you may needed in Linux system: 'libtool', 'automake', 'autoconf', 'mpich'. You can install them using the following command:
+    - 'sudo apt update && sudo apt-get install libtool automake autoconf mpich'
+3. Consider building MPICH from source for the best performance and reliability.
