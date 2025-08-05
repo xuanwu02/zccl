@@ -1702,3 +1702,347 @@ void ZCCL_float_single_thread_arg_split_record(unsigned char *outputBytes,
     free(outSize_perthread_arr);
     free(offsets_perthread_arr);
 }
+
+void SZp_compress3D_fast(
+    const float *oriData, unsigned char *cmpData,
+    size_t dim1, size_t dim2, size_t dim3, int blockSideLength,
+    double errorBound, size_t *cmpSize
+){
+    double inver_eb = 0.5 / errorBound;
+    DSize_3d size;
+    DSize3D_init(&size, dim1, dim2, dim3, blockSideLength);
+    size_t offset_0 = (size.dim2 + 1) * (size.dim3 + 1);
+    size_t offset_1 = size.dim3 + 1;
+    size_t block_offset_0 = size.Bsize * size.Bsize;
+    int * col_buffer = (int *)calloc(block_offset_0, sizeof(int));
+    int * prevSlice_buffer = (int *)calloc(size.offset_0, sizeof(int));
+    int ** prevRow_buffer = (int **)malloc(size.Bsize*sizeof(int *));
+    for(int i=0; i<size.Bsize; i++) prevRow_buffer[i] = (int *)calloc(size.dim3, sizeof(int));
+    unsigned int * absPredError = (unsigned int *)malloc(size.max_num_block_elements*sizeof(unsigned int));
+    unsigned char * signFlag = (unsigned char *)malloc(size.max_num_block_elements*sizeof(unsigned char));
+    const float * x_data_pos = oriData;
+    unsigned char * cmpData_pos = cmpData + size.num_blocks;
+    int block_ind = 0;
+    for(size_t x=0; x<size.block_dim1; x++){
+        int size_x = ((x+1)*size.Bsize < size.dim1) ? size.Bsize : size.dim1 - x*size.Bsize;
+        const float * y_data_pos = x_data_pos;
+        for(int i=0; i<size.Bsize; i++) memset(prevRow_buffer[i], 0, size.dim3*sizeof(int));
+        for(size_t y=0; y<size.block_dim2; y++){
+            int size_y = ((y+1)*size.Bsize < size.dim2) ? size.Bsize : size.dim2 - y*size.Bsize;
+            const float * z_data_pos = y_data_pos;
+            memset(col_buffer, 0, block_offset_0*sizeof(int));
+            for(size_t z=0; z<size.block_dim3; z++){
+                int size_z = ((z+1)*size.Bsize < size.dim3) ? size.Bsize : size.dim3 - z*size.Bsize;
+                int block_size = size_x * size_y * size_z;
+                unsigned int * abs_err_pos = absPredError;
+                unsigned char * sign_pos = signFlag;
+                const float * curr_data_pos = z_data_pos;
+                int offset = y * size.Bsize * size.dim3 + z * size.Bsize;
+                int max_err = 0;
+                for(int i=0; i<size_x; i++){
+                    int * prevRow = prevRow_buffer[i] + z * size.Bsize;
+                    int * prevSlice = prevSlice_buffer + offset;
+                    for(int j=0; j<size_y; j++){
+                        int index = i*size.Bsize+j;
+                        int prevLeft = col_buffer[index];
+                        int * prevSlice_pos = prevSlice + j * size.offset_1;
+                        for(int k=0; k<size_z; k++){
+                            int q = SZ_quantize(*curr_data_pos, inver_eb);
+                            int err_1 = q - prevLeft;
+                            int err_2 = err_1 - prevRow[k];
+                            int err_3 = err_2 - prevSlice_pos[k];
+                            prevRow[k] = err_1;
+                            prevSlice_pos[k] = err_2;
+                            prevLeft = q;
+                            (*sign_pos++) = (err_3 < 0);
+                            unsigned int u = abs(err_3);
+                            (*abs_err_pos++) = u;
+                            max_err = max_err > u ? max_err : u;
+                            curr_data_pos++;
+                        }
+                        col_buffer[index] = prevLeft;
+                        curr_data_pos += size.offset_1 - size_z;
+                    }
+                    curr_data_pos += size.offset_0 - size_y * size.offset_1;
+                }
+                z_data_pos += size_z;
+                int fixed_rate = max_err == 0 ? 0 : INT_BITS - __builtin_clz(max_err);
+                cmpData[block_ind++] = (unsigned char)fixed_rate;
+                if(fixed_rate){
+                    unsigned int signbyteLength = convertIntArray2ByteArray_fast_1b_args(signFlag, block_size, cmpData_pos);
+                    cmpData_pos += signbyteLength;
+                    unsigned int savedbitsbyteLength = Jiajun_save_fixed_length_bits(absPredError, block_size, cmpData_pos, fixed_rate);
+                    cmpData_pos += savedbitsbyteLength;
+                }
+            }
+            y_data_pos += size.Bsize * size.offset_1;
+        }
+        x_data_pos += size.Bsize * size.offset_0;
+    }
+    *cmpSize = cmpData_pos - cmpData;
+    for(int i=0; i<size.Bsize; i++) free(prevRow_buffer[i]);
+    free(col_buffer);
+    free(prevSlice_buffer);
+    free(prevRow_buffer);
+    free(absPredError);
+    free(signFlag);
+}
+
+void SZp_compress3D(
+    const float *oriData, unsigned char *cmpData,
+    size_t dim1, size_t dim2, size_t dim3, int blockSideLength,
+    double errorBound, size_t *cmpSize
+){
+    double inver_eb = 0.5 / errorBound;
+    DSize_3d size;
+    DSize3D_init(&size, dim1, dim2, dim3, blockSideLength);
+    size_t offset_0 = (size.dim2 + 1) * (size.dim3 + 1);
+    size_t offset_1 = size.dim3 + 1;
+    int * quant_buffer = (int *)malloc((size.Bsize+1)*(size.dim2+1)*(size.dim3+1)*sizeof(int));
+    memset(quant_buffer, 0, (size.Bsize+1)*(size.dim2+1)*(size.dim3+1)*sizeof(int));
+    unsigned int * absPredError = (unsigned int *)malloc(size.max_num_block_elements*sizeof(unsigned int));
+    unsigned char * signFlag = (unsigned char *)malloc(size.max_num_block_elements*sizeof(unsigned char));
+    const float * x_data_pos = oriData;
+    unsigned char * cmpData_pos = cmpData + size.num_blocks;
+    int block_ind = 0;
+    for(size_t x=0; x<size.block_dim1; x++){
+        const float * y_data_pos = x_data_pos;
+        int * buffer_start_pos = quant_buffer + offset_0 + offset_1 + 1;
+        for(size_t y=0; y<size.block_dim2; y++){
+            const float * z_data_pos = y_data_pos;
+            for(size_t z=0; z<size.block_dim3; z++){
+                int size_x = ((x+1)*size.Bsize < size.dim1) ? size.Bsize : size.dim1 - x*size.Bsize;
+                int size_y = ((y+1)*size.Bsize < size.dim2) ? size.Bsize : size.dim2 - y*size.Bsize;
+                int size_z = ((z+1)*size.Bsize < size.dim3) ? size.Bsize : size.dim3 - z*size.Bsize;
+                int block_size = size_x * size_y * size_z;
+                unsigned int * abs_diff_pos = absPredError;
+                unsigned char * sign_pos = signFlag;
+                int quant_diff, max_quant_diff = 0;
+                const float * curr_data_pos = z_data_pos;
+                int * block_buffer_pos = buffer_start_pos;
+                for(int i=0; i<size_x; i++){
+                    for(int j=0; j<size_y; j++){
+                        int * curr_buffer_pos = block_buffer_pos;
+                        for(int k=0; k<size_z; k++){
+                            quant_diff = predict_lorenzo_3d(curr_data_pos++, curr_buffer_pos++, inver_eb, offset_0, offset_1);
+                            (*sign_pos++) = (quant_diff < 0);
+                            unsigned int abs_diff = abs(quant_diff);
+                            (*abs_diff_pos++) = abs_diff;
+                            max_quant_diff = max_quant_diff > abs_diff ? max_quant_diff : abs_diff;
+                        }
+                        block_buffer_pos += offset_1;
+                        curr_data_pos += size.offset_1 - size_z;
+                    }
+                    block_buffer_pos += offset_0 - size_y * offset_1;
+                    curr_data_pos += size.offset_0 - size_y * size.offset_1;
+                }
+                buffer_start_pos += size.Bsize;
+                z_data_pos += size_z;
+                int fixed_rate = max_quant_diff == 0 ? 0 : INT_BITS - __builtin_clz(max_quant_diff);
+                cmpData[block_ind++] = (unsigned char)fixed_rate;
+                if(fixed_rate){
+                    unsigned int signbyteLength = convertIntArray2ByteArray_fast_1b_args(signFlag, block_size, cmpData_pos);
+                    cmpData_pos += signbyteLength;
+                    unsigned int savedbitsbyteLength = Jiajun_save_fixed_length_bits(absPredError, block_size, cmpData_pos, fixed_rate);
+                    cmpData_pos += savedbitsbyteLength;
+                }
+            }
+            buffer_start_pos += size.Bsize * offset_1 - size.Bsize * size.block_dim3;
+            y_data_pos += size.Bsize * size.offset_1;
+        }
+        memcpy(quant_buffer, quant_buffer+size.Bsize*offset_0, offset_0*sizeof(int));
+        x_data_pos += size.Bsize * size.offset_0;
+    }
+    *cmpSize = cmpData_pos - cmpData;
+    free(quant_buffer);
+    free(absPredError);
+    free(signFlag);
+}
+
+void SZp_compress3D_fast_openmp(
+    const float *oriData, unsigned char *cmpData,
+    size_t dim1, size_t dim2, size_t dim3, int blockSideLength,
+    double errorBound, size_t *cmpSize
+){
+#ifdef _OPENMP
+    float *op = oriData;
+    double inver_eb = 0.5 / errorBound;
+
+    size_t nbEle = dim1 * dim2 * dim3;
+    size_t gloff_0 = dim2 * dim3;
+    size_t gloff_1 = dim3;
+
+    size_t maxPreservedBufferSize = sizeof(float) * nbEle;
+    size_t maxPreservedBufferSize_perthread = 0;
+
+    unsigned char *real_outputBytes;
+    size_t *outSize_perthread_arr;
+    size_t *offsets_perthread_arr;
+
+    (*cmpSize) = 0;
+
+    size_t base_x, base_y, base_z;
+    size_t rem_x, rem_y, rem_z;
+
+    Meta *meta = NULL;
+    size_t gloffset;
+
+#pragma omp parallel
+    {
+        int nbThreads = omp_get_num_threads();
+        int tid = omp_get_thread_num();
+#pragma omp single
+        {
+            real_outputBytes = cmpData + nbThreads * sizeof(size_t);
+            (*cmpSize) += nbThreads * sizeof(size_t);
+
+            outSize_perthread_arr = (size_t *) malloc(nbThreads * sizeof(size_t));
+            offsets_perthread_arr = (size_t *) malloc(nbThreads * sizeof(size_t));
+            maxPreservedBufferSize_perthread = (sizeof(float) * nbEle + nbThreads - 1) / nbThreads;
+
+            int tdims[3] = {0,0,0};
+            My_Dims_create(nbThreads, 3, tdims);
+            base_x = dim1 / tdims[0], rem_x = dim1 % tdims[0];
+            base_y = dim2 / tdims[1], rem_y = dim2 % tdims[1];
+            base_z = dim3 / tdims[2], rem_z = dim3 % tdims[2];
+            // meta
+            meta = (Meta*)malloc(nbThreads * sizeof(Meta));
+            int ox_acc = 0, r = 0;
+            for (int px = 0; px < tdims[0]; px++) {
+                int sx = base_x + (px < rem_x ? 1 : 0);
+                int ox = ox_acc;
+                ox_acc += sx;
+
+                int oy_acc = 0;
+                for (int py = 0; py < tdims[1]; py++) {
+                    int sy = base_y + (py < rem_y ? 1 : 0);
+                    int oy = oy_acc;
+                    oy_acc += sy;
+
+                    int oz_acc = 0;
+                    for (int pz = 0; pz < tdims[2]; pz++) {
+                        int sz = base_z + (pz < rem_z ? 1 : 0);
+                        int oz = oz_acc;
+                        oz_acc += sz;
+
+                        int ls = sz * sy * sz;
+                        meta[r++] = (Meta){ox, oy, oz, sx, sy, sz, ls};
+                    }
+                }
+            }
+        }
+#pragma omp barrier
+        // printf("cmp -> tid = %d / %d\n", tid,nbThreads);
+        // fflush(stdout);
+#pragma omp barrier
+
+        Meta m = meta[tid];
+        gloffset = m.ox * gloff_0 + m.oy * gloff_1 + m.oz;
+
+        DSize_3d size;
+        DSize3D_init(&size, m.sx, m.sy, m.sz, blockSideLength);
+
+        unsigned char *outputBytes_perthread = (unsigned char *) malloc(maxPreservedBufferSize_perthread);
+        unsigned char * thr_pos = outputBytes_perthread + size.num_blocks * FIXED_RATE_PER_BLOCK_BYTES;
+
+        size_t block_offset_0 = size.Bsize * size.Bsize;
+        int * col_buffer = (int *)calloc(block_offset_0, sizeof(int));
+        int * prevSlice_buffer = (int *)calloc(size.offset_0, sizeof(int));
+        int ** prevRow_buffer = (int **)malloc(size.Bsize*sizeof(int *));
+        for(int i=0; i<size.Bsize; i++) prevRow_buffer[i] = (int *)calloc(size.dim3, sizeof(int));
+        unsigned int * absPredError = (unsigned int *)malloc(size.max_num_block_elements*sizeof(unsigned int));
+        unsigned char * signFlag = (unsigned char *)malloc(size.max_num_block_elements*sizeof(unsigned char));
+        const float * x_data_pos = op + gloffset;
+        int block_ind = 0;
+        for(size_t x=0; x<size.block_dim1; x++){
+            int size_x = ((x+1)*size.Bsize < size.dim1) ? size.Bsize : size.dim1 - x*size.Bsize;
+            const float * y_data_pos = x_data_pos;
+            for(int i=0; i<size.Bsize; i++) memset(prevRow_buffer[i], 0, size.dim3*sizeof(int));
+            for(size_t y=0; y<size.block_dim2; y++){
+                int size_y = ((y+1)*size.Bsize < size.dim2) ? size.Bsize : size.dim2 - y*size.Bsize;
+                const float * z_data_pos = y_data_pos;
+                memset(col_buffer, 0, block_offset_0*sizeof(int));
+                for(size_t z=0; z<size.block_dim3; z++){
+                    int size_z = ((z+1)*size.Bsize < size.dim3) ? size.Bsize : size.dim3 - z*size.Bsize;
+                    int block_size = size_x * size_y * size_z;
+                    unsigned int * abs_err_pos = absPredError;
+                    unsigned char * sign_pos = signFlag;
+                    const float * curr_data_pos = z_data_pos;
+                    int offset = y * size.Bsize * size.dim3 + z * size.Bsize;
+                    int max_err = 0;
+                    for(int i=0; i<size_x; i++){
+                        int * prevRow = prevRow_buffer[i] + z * size.Bsize;
+                        int * prevSlice = prevSlice_buffer + offset;
+                        for(int j=0; j<size_y; j++){
+                            int index = i*size.Bsize+j;
+                            int prevLeft = col_buffer[index];
+                            int * prevSlice_pos = prevSlice + j * size.offset_1;
+                            for(int k=0; k<size_z; k++){
+                                int q = SZ_quantize(*curr_data_pos, inver_eb);
+                                int err_1 = q - prevLeft;
+                                int err_2 = err_1 - prevRow[k];
+                                int err_3 = err_2 - prevSlice_pos[k];
+                                prevRow[k] = err_1;
+                                prevSlice_pos[k] = err_2;
+                                prevLeft = q;
+                                (*sign_pos++) = (err_3 < 0);
+                                unsigned int u = abs(err_3);
+                                (*abs_err_pos++) = u;
+                                max_err = max_err > u ? max_err : u;
+                                curr_data_pos++;
+                            }
+                            col_buffer[index] = prevLeft;
+                            curr_data_pos += gloff_1 - size_z;
+                        }
+                        curr_data_pos += gloff_0 - size_y * gloff_1;
+                    }
+                    z_data_pos += size_z;
+                    int fixed_rate = max_err == 0 ? 0 : INT_BITS - __builtin_clz(max_err);
+                    outputBytes_perthread[block_ind++] = (unsigned char)fixed_rate;
+                    if(fixed_rate){
+                        unsigned int signbyteLength = convertIntArray2ByteArray_fast_1b_args(signFlag, block_size, thr_pos);
+                        thr_pos += signbyteLength;
+                        unsigned int savedbitsbyteLength = Jiajun_save_fixed_length_bits(absPredError, block_size, thr_pos, fixed_rate);
+                        thr_pos += savedbitsbyteLength;
+                    }
+                }
+                y_data_pos += size.Bsize * gloff_1;
+            }
+            x_data_pos += size.Bsize * gloff_0;
+        }
+
+        size_t outSize_perthread = thr_pos - outputBytes_perthread;
+        outSize_perthread_arr[tid] = outSize_perthread;
+#pragma omp barrier
+
+#pragma omp single
+        {
+            offsets_perthread_arr[0] = 0;
+            for (int i = 1; i < nbThreads; i++) {
+                offsets_perthread_arr[i] = offsets_perthread_arr[i - 1] + outSize_perthread_arr[i - 1];
+            }
+            (*cmpSize) += offsets_perthread_arr[nbThreads - 1] + outSize_perthread_arr[nbThreads - 1];
+            memcpy(cmpData, offsets_perthread_arr, nbThreads * sizeof(size_t));
+        }
+#pragma omp barrier
+
+        memcpy(real_outputBytes + offsets_perthread_arr[tid], outputBytes_perthread, outSize_perthread);
+
+        free(col_buffer);
+        free(prevSlice_buffer);
+        free(prevRow_buffer);
+        free(outputBytes_perthread);
+        free(signFlag);
+        free(absPredError);
+#pragma omp barrier
+
+#pragma omp single
+        {
+            free(outSize_perthread_arr);
+            free(offsets_perthread_arr);
+        }
+    }
+#else
+    printf("Error! OpenMP not supported!\n");
+#endif
+}

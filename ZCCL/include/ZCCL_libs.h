@@ -28,12 +28,18 @@ typedef float data_type;
 #define MPIR_CVAR_ALLGATHERV_CPR_PIPELINE_MSG_SIZE 983040
 #define SINGLETHREAD_CHUNK_SIZE 5120
 #define MULTITHREAD_CHUNK_SIZE 256000
+#define SEGSIZE 8388608
 #define SAVE_CPR_RESULT 1
 #define PRINT_DETAILS 0
 #define PRINT_EXPLANATION 0
 #define PRINT_AVGRESULTS 1
 #define PRINT_EXPERIMENTS 1
 #define tag_base 100
+
+#define INT_BITS 32
+#define INT_BYTES 4
+#define FLOAT_BYTES 4
+#define FIXED_RATE_PER_BLOCK_BYTES 1
 
 void add_vectors(float *result, const float *a, const float *b, int n);
 
